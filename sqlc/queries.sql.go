@@ -7,7 +7,6 @@ package sqlite
 
 import (
 	"context"
-	"database/sql"
 )
 
 const getAllEmployees = `-- name: GetAllEmployees :many
@@ -47,8 +46,8 @@ SELECT id, name, manager, start_date FROM employees WHERE start_date >= ? AND st
 `
 
 type GetEmployeesStartingSoonParams struct {
-	StartDate   sql.NullString
-	StartDate_2 sql.NullString
+	StartDate   string
+	StartDate_2 string
 }
 
 func (q *Queries) GetEmployeesStartingSoon(ctx context.Context, arg GetEmployeesStartingSoonParams) ([]Employee, error) {
@@ -88,8 +87,8 @@ RETURNING id, name, manager, start_date
 type InsertEmployeeParams struct {
 	ID        int64
 	Name      string
-	Manager   sql.NullString
-	StartDate sql.NullString
+	Manager   string
+	StartDate string
 }
 
 func (q *Queries) InsertEmployee(ctx context.Context, arg InsertEmployeeParams) (Employee, error) {

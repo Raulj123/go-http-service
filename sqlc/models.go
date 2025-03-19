@@ -4,13 +4,9 @@
 
 package sqlite
 
-import (
-	"database/sql"
-)
-
 type Employee struct {
 	ID        int64
 	Name      string
-	Manager   sql.NullString
-	StartDate sql.NullString
+	Manager   string
+	StartDate string
 }
