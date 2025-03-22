@@ -1,7 +1,6 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -22,6 +21,7 @@ func (s *Server) getEmployees() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request){
 		queries := sqlite.New(s.DB)
 		employees, err := queries.GetAllEmployees(r.Context())
+		defer r.Body.Close()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -41,7 +41,7 @@ func (s *Server) getStartSoon() http.HandlerFunc {
 			StartDate_2: utils.GetFutureDate(),
 		}
 		employees, err := queries.GetEmployeesStartingSoon(r.Context(), parmas)
-		
+		defer r.Body.Close()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -64,7 +64,7 @@ func (s *Server) postEmployee() http.HandlerFunc {
 			return
 		}
 		
-		d,err := decodeJson[Employee](r)
+		d,err := utils.DecodeJson[Employee](r)
 		
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -84,32 +84,6 @@ func (s *Server) postEmployee() http.HandlerFunc {
 		}
 		fmt.Println("Employee: ", employee)
 		// does go infer the type here?
-		encodeJson(w,http.StatusOK, d)
+		utils.EncodeJson(w,http.StatusOK, d)
 	}
-}
-
-// My brain has a hard time getting these two right
-// Decode → "Deconstruct JSON" → "JSON to Go".
-//Encode → "Construct JSON" → "Go to JSON".
-
-// This generic function takes any type and decodes json to specifed type
-func decodeJson[T any](r *http.Request) (T, error){
-	var v T
-	d := json.NewDecoder(r.Body)
-	// no unkown fields bitch
-	d.DisallowUnknownFields()
-	if err := d.Decode((&v)); err != nil {
-		return v, fmt.Errorf("decode json %w", err)
-	}
-	return v, nil
-}
-
-func encodeJson[T any](w http.ResponseWriter, staus int, v T) error {
-	w.Header().Set("content/type", "application/json")
-	w.WriteHeader(staus)
-	if err := json.NewEncoder(w).Encode(v); err != nil {
-		return fmt.Errorf("encode json %w", err)
-	}
-	fmt.Fprintf(w,"Recored! %v", v)
-	return nil
 }
