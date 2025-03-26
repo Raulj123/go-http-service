@@ -8,3 +8,12 @@ SELECT * FROM employees;
 
 -- name: GetEmployeesStartingSoon :many
 SELECT * FROM employees WHERE start_date >= ? AND start_date <= ?;
+
+-- name: GetEmployee :one
+SELECT 
+    id,
+    name,
+    manager,
+    start_date 
+FROM employees 
+WHERE id = ?;

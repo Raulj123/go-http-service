@@ -41,6 +41,28 @@ func (q *Queries) GetAllEmployees(ctx context.Context) ([]Employee, error) {
 	return items, nil
 }
 
+const getEmployee = `-- name: GetEmployee :one
+SELECT 
+    id,
+    name,
+    manager,
+    start_date 
+FROM employees 
+WHERE id = ?
+`
+
+func (q *Queries) GetEmployee(ctx context.Context, id int64) (Employee, error) {
+	row := q.db.QueryRowContext(ctx, getEmployee, id)
+	var i Employee
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Manager,
+		&i.StartDate,
+	)
+	return i, err
+}
+
 const getEmployeesStartingSoon = `-- name: GetEmployeesStartingSoon :many
 SELECT id, name, manager, start_date FROM employees WHERE start_date >= ? AND start_date <= ?
 `

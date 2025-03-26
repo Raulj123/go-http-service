@@ -15,9 +15,9 @@ type Server struct {
 	Router *chi.Mux
 	DB     *sql.DB
 }
-
 // This function creates new server struct, calls routes and returns server to main
 func NewServer(db *sql.DB) *Server {
+	
 	s := Server {
 		server: &http.Server{
 			WriteTimeout: 5 *time.Second,

@@ -16,6 +16,7 @@ type Employee struct {
 	Manager string `json:"manager"`
 	StartDate string `json:"start_date"`
 }
+
 // This function handles getEmployees route in the future should handle all employee related routes
 func (s *Server) getEmployees() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request){

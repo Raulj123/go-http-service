@@ -15,7 +15,7 @@ type Config struct {
 }
 
 // This function reads a env file in your project root and loads the configuration value
-func LoadConfig(path string) (*Config, error){
+func Load(path string) (*Config, error){
 	myConfig := Config{}
 	configFile, err := os.ReadFile(path)
 	if err != nil {
