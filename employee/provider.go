@@ -7,7 +7,7 @@ type Employee struct {
 	StartDate string `json:"start_date"`
 }
 
-type EmpProvider interface {
+type Provider interface {
 	Store(Employee) error 
 	Employee(id int64) (*Employee, error)
 }

@@ -14,7 +14,7 @@ type empProvider struct {
 
 var ctx = context.Background()
 
-func NewEmpProvider(db *sql.DB) EmpProvider {
+func NewEmpProvider(db *sql.DB) Provider {
 	queries := sqlite.New(db)
 	return empProvider{db, queries}
 }

@@ -1,10 +1,9 @@
-package handler
+package employee
 
 import (
 	"net/http"
 	"strconv"
 
-	"github.com/Raulj123/go-service/employee"
 	"github.com/Raulj123/go-service/utils"
 	"github.com/go-chi/chi/v5"
 )
@@ -12,10 +11,10 @@ import (
 
 type Handler struct {
 	http.Handler
-	provider employee.EmpProvider
+	provider Provider
 }
 
-func NewHandler(prov employee.EmpProvider) *Handler {
+func NewHandler(prov Provider) *Handler {
 	r := chi.NewRouter()
 	h := &Handler{
 		Handler: r,
@@ -46,7 +45,7 @@ func (h *Handler) postEmployee(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid method",http.StatusBadRequest)
 		return
 	}
-	d,err := utils.DecodeJson[employee.Employee](r)
+	d,err := utils.DecodeJson[Employee](r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

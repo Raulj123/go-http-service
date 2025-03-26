@@ -8,7 +8,6 @@ import (
 
 	"github.com/Raulj123/go-service/config"
 	"github.com/Raulj123/go-service/employee"
-	"github.com/Raulj123/go-service/handler"
 	"github.com/go-chi/chi"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -35,7 +34,7 @@ func main(){
 	db := initDB()
 	prov := employee.NewEmpProvider(db)
 	r := chi.NewRouter()
-	r.Mount("/", handler.NewHandler(prov))
+	r.Mount("/", employee.NewHandler(prov))
 	defer db.Close()
 	log.Fatal("cannot serve:", http.ListenAndServe(":8080", r))
 }
