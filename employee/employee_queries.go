@@ -44,3 +44,20 @@ func (e empProvider) Store(emp Employee) error {
 	}
 	return nil
 }
+
+func (e empProvider) Employees() ([]Employee, error) {
+	var res []Employee
+	emps, err := e.Queries.GetAllEmployees(ctx)
+	if err != nil {
+		return nil,err
+	}
+	for _, emp := range emps {
+		res = append(res, Employee{
+            Id:   int(emp.ID),
+            Name: emp.Name,
+			Manager: emp.Manager,
+			StartDate: emp.StartDate,
+        })
+	}
+	return res,nil
+}

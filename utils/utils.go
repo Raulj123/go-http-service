@@ -42,6 +42,5 @@ func EncodeJson[T any](w http.ResponseWriter, staus int, v T) error {
 	if err := json.NewEncoder(w).Encode(v); err != nil {
 		return fmt.Errorf("encode json %w", err)
 	}
-	fmt.Fprintf(w,"Recored! %v", v)
 	return nil
 }

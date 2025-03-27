@@ -20,8 +20,11 @@ func NewHandler(prov Provider) *Handler {
 		Handler: r,
 		provider: prov,
 	}
-	r.Get("/{id}", h.getEmployee)
+	r.Get("/", h.getEmployees)
 	r.Post("/", h.postEmployee)
+	r.Route("/{id}", func(r chi.Router) {
+		r.Get("/", h.getEmployee)
+	}) 
 	return h
 }
 
@@ -37,7 +40,10 @@ func (h *Handler) getEmployee(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return 
 	}
-	utils.EncodeJson(w, http.StatusOK, emp)
+	if err := utils.EncodeJson(w, http.StatusOK,emp); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *Handler) postEmployee(w http.ResponseWriter, r *http.Request) {
@@ -55,4 +61,17 @@ func (h *Handler) postEmployee(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+func (h *Handler) getEmployees(w http.ResponseWriter, r *http.Request){
+	emps,err := h.provider.Employees()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := utils.EncodeJson(w, http.StatusOK,emps); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
 }

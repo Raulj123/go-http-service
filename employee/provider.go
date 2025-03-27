@@ -10,4 +10,5 @@ type Employee struct {
 type Provider interface {
 	Store(Employee) error 
 	Employee(id int64) (*Employee, error)
+	Employees() ([]Employee, error)
 }
