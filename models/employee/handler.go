@@ -20,7 +20,7 @@ func NewHandler(prov Provider) *Handler {
 		Handler: r,
 		provider: prov,
 	}
-	r.Get("/", h.getEmployees)
+	r.Get("/", h.GetEmployees)
 	r.Post("/", h.postEmployee)
 	r.Route("/{id}", func(r chi.Router) {
 		r.Get("/", h.getEmployee)
@@ -63,7 +63,7 @@ func (h *Handler) postEmployee(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) getEmployees(w http.ResponseWriter, r *http.Request){
+func (h *Handler) GetEmployees(w http.ResponseWriter, r *http.Request){
 	emps,err := h.provider.Employees()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
