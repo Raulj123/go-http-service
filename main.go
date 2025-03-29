@@ -29,7 +29,7 @@ func initDB() *sql.DB{
 	}
 	err = db.Ping()
 	if err != nil {
-		log.Fatal("Could not verify connection to db")
+		log.Fatal("Could not verify connection to db",err)
 	}
 	return db
 }
@@ -38,12 +38,20 @@ func initDB() *sql.DB{
 // TODO: add global logger
 func main(){
 	db := initDB()
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Fatal("Could not close DB")
+		}
+	}()
 
 	prov := employee.NewEmpProvider(db)
+	r := chi.NewRouter()
+	r.Mount("/", employee.NewHandler(prov))
 	s := &http.Server{
-		Addr: ":3000",
+		Addr: ":8080",
+		Handler: r,
 	}
+	fmt.Println("starting server on localhost:8080")
 	go func() {
 		if err := s.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("HTTP server error: %v", err)
@@ -61,6 +69,4 @@ func main(){
         log.Fatalf("HTTP shutdown error: %v", err)
     }
     log.Println("Graceful shutdown complete.")
-	r := chi.NewRouter()
-	r.Mount("/", employee.NewHandler(prov))
 }

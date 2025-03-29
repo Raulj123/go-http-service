@@ -20,7 +20,7 @@ func NewEmpProvider(db *sql.DB) Provider {
 }
 
 func (e empProvider) Employee(id int64) (*Employee, error) {
-	emp, err := e.Queries.GetEmployee(ctx, id)
+	emp, err := e.GetEmployee(ctx, id)
 	if err != nil {
 		return nil,err
 	}
@@ -33,7 +33,7 @@ func (e empProvider) Employee(id int64) (*Employee, error) {
 }
 
 func (e empProvider) Store(emp Employee) error {
-	_, err := e.Queries.InsertEmployee(ctx, sqlite.InsertEmployeeParams{
+	_, err := e.InsertEmployee(ctx, sqlite.InsertEmployeeParams{
 		ID: int64(emp.Id),
 		Name: emp.Name,
 		Manager: emp.Manager,
@@ -47,7 +47,7 @@ func (e empProvider) Store(emp Employee) error {
 
 func (e empProvider) Employees() ([]Employee, error) {
 	var res []Employee
-	emps, err := e.Queries.GetAllEmployees(ctx)
+	emps, err := e.GetAllEmployees(ctx)
 	if err != nil {
 		return nil,err
 	}

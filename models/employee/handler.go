@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Raulj123/go-service/utils"
+	"github.com/Raulj123/go-service/httpjson"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -40,7 +40,7 @@ func (h *Handler) getEmployee(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return 
 	}
-	if err := utils.EncodeJson(w, http.StatusOK,emp); err != nil {
+	if err := httpjson.Encode(w, http.StatusOK,emp); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -51,7 +51,7 @@ func (h *Handler) postEmployee(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid method",http.StatusBadRequest)
 		return
 	}
-	d,err := utils.DecodeJson[Employee](r)
+	d,err := httpjson.Decode[Employee](r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -69,7 +69,7 @@ func (h *Handler) GetEmployees(w http.ResponseWriter, r *http.Request){
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := utils.EncodeJson(w, http.StatusOK,emps); err != nil {
+	if err := httpjson.Encode(w, http.StatusOK,emps); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
