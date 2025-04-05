@@ -24,7 +24,11 @@ func NewHandler(prov Provider) *Handler {
 	r.Post("/", h.postEmployee)
 	r.Route("/{id}", func(r chi.Router) {
 		r.Get("/", h.getEmployee)
-	}) 
+	})
+	// r.Route("/salarys", func(r chi.Router) {
+	// 	r.Get("/", h.getEmployeeSalary)
+	// })
+	r.NotFound(handle404) 
 	return h
 }
 
@@ -74,4 +78,9 @@ func (h *Handler) GetEmployees(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	
+}
+
+func handle404(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(404)
+	w.Write([]byte("are you dumb or stoopid?"))
 }

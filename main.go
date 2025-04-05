@@ -18,7 +18,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func initDB() *sql.DB{
+func initDB() *sql.DB {
 	conf, err := config.Load("./env.json")
 	if err != nil {
 		fmt.Println("Could not load env",err)
