@@ -47,6 +47,11 @@ func main(){
 	prov := employee.NewEmpProvider(db)
 	r := chi.NewRouter()
 	r.Mount("/", employee.NewHandler(prov))
+	// not sure if this is the best place w/e
+	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK :)"))
+	})
 	s := &http.Server{
 		Addr: ":8080",
 		Handler: r,

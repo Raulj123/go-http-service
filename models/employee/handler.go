@@ -25,9 +25,6 @@ func NewHandler(prov Provider) *Handler {
 	r.Route("/{id}", func(r chi.Router) {
 		r.Get("/", h.getEmployee)
 	})
-	// r.Route("/salarys", func(r chi.Router) {
-	// 	r.Get("/", h.getEmployeeSalary)
-	// })
 	r.NotFound(handle404) 
 	return h
 }
